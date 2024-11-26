@@ -2,6 +2,7 @@ import Testing
 import Foundation
 import Nutrition
 
+@Suite
 struct JsonSamplesTodaySummaryTests {
 
   @Test func printYourExampleHere() throws {
