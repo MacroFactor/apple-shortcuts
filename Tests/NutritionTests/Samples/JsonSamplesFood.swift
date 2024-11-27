@@ -19,9 +19,72 @@ struct JsonSamplesFoodTests {
 
   @Test func customServingExample() throws {
     let food = try JSONDecoder().decode(MacroFactorFood.self, from: Data(espressoCustomServingJSON.utf8))
-    #expect(food.serving == .custom(Serving.CustomServing(amount: 40.0, unit: .milliliters)))
+    #expect(food.serving == .custom(Serving.CustomServing(amount: 1, label: "pull", weight: 40.0))) // Weight is in grams
+  }
+
+  @Test func measuredServingExample() throws {
+    let food = try JSONDecoder().decode(MacroFactorFood.self, from: Data(espressoMeasuredServingJSON.utf8))
+    #expect(food.serving == .measured(Serving.MeasuredServing(amount: 40.0, unit: .grams)))
   }
 }
+
+private let espressoMinimalJSON = """
+{
+  "icon" : "coffeeEspresso",
+  "name" : "Morning Coffee",
+  "nutrients" : {
+    "caffeine" : 30,
+    "water" : 36,
+  },
+  "serving": "one",
+  "source" : "my-shot-logger"
+}
+"""
+
+/// An arbitrary serving (e.g., a helping). We use its weight (in grams) for changing quantity or to other serving sizes.
+private let espressoCustomServingJSON = """
+{
+  "barcode" : "123456789",
+  "beverage" : "beverage",
+  "brand" : "Finca Monteblanco",
+  "icon" : "coffeeEspresso",
+  "llmPrompt" : "light roast turbo espresso shot",
+  "name" : "Purple Caturra Washed, Extractamundo Dos",
+  "notes" : "Not fruity enough. Loosen grind, charge roast hotter.",
+  "nutrients" : {
+    "caffeine" : 30,
+    "water" : 36,
+  },
+  "serving" : {
+    "amount" : 1,
+    "label" : "pull",
+    "weight" : 40
+  },
+  "source" : "my-shot-logger"
+}
+"""
+
+/// We accept a limited number of units. See ``Serving.Unit``.
+private let espressoMeasuredServingJSON = """
+{
+  "barcode" : "123456789",
+  "beverage" : "beverage",
+  "brand" : "Finca Monteblanco",
+  "icon" : "coffeeEspresso",
+  "llmPrompt" : "light roast turbo espresso shot",
+  "name" : "Purple Caturra Washed, Extractamundo Dos",
+  "notes" : "Not fruity enough. Loosen grind, charge roast hotter.",
+  "nutrients" : {
+    "caffeine" : 30,
+    "water" : 36,
+  },
+  "serving" : {
+    "amount" : 40,
+    "unit" : "grams"
+  },
+  "source" : "my-shot-logger"
+}
+"""
 
 private let maximalistJSON = """
 {
@@ -165,7 +228,7 @@ private extension MacroFactorFood {
         .sodium: 1.0, /// mg
         .zinc: 1.0, /// mg
       ],
-      serving: .custom(Serving.CustomServing(amount: 36.0, unit: .milliliters)),
+      serving: .measured(Serving.MeasuredServing(amount: 36.0, unit: .milliliters)),
       llmPrompt: "Saving the prompt supports reanalysis later",
       barcode: "123456789",
       brand: "Manufacturer Name",
@@ -175,37 +238,3 @@ private extension MacroFactorFood {
     )
   }
 }
-
-private let espressoMinimalJSON = """
-{
-  "icon" : "coffeeEspresso",
-  "name" : "Morning Coffee",
-  "nutrients" : {
-    "caffeine" : 30,
-    "water" : 36,
-  },
-  "serving": "one",
-  "source" : "my-shot-logger"
-}
-"""
-
-private let espressoCustomServingJSON = """
-{
-  "barcode" : "123456789",
-  "beverage" : "beverage",
-  "brand" : "Finca Monteblanco",
-  "icon" : "coffeeEspresso",
-  "llmPrompt" : "light roast turbo espresso shot",
-  "name" : "Purple Caturra Washed, Extractamundo Dos",
-  "notes" : "Not fruity enough. Loosen grind, charge roast hotter.",
-  "nutrients" : {
-    "caffeine" : 30,
-    "water" : 36,
-  },
-  "serving" : {
-    "amount" : 40,
-    "unit" : "milliliters"
-  },
-  "source" : "my-shot-logger"
-}
-"""
