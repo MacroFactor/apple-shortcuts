@@ -342,4 +342,10 @@ public enum Icon: String, Codable, CaseIterable {
   case wokStirFry
   case yogurt
   case zucchini
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let rawValue = try container.decode(String.self)
+    self = Icon(rawValue: rawValue) ?? Icon.foodDefault
+  }
 }
