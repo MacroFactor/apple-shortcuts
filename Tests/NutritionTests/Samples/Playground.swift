@@ -39,6 +39,7 @@ private extension MacroFactorFood {
 private let yourJSON = """
 {
   "barcode": "987654321",
+  "beverage": null,
   "brand": "Generic Brand",
   "icon": "foodDefault",
   "llmPrompt": "Nutritional analysis of a typical omelette",
