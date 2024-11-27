@@ -2,6 +2,7 @@ import Testing
 import Foundation
 import Nutrition
 
+@Suite
 struct SanityChecks {
 
   @Test func macroFactorFoodRoundTrip() throws {
@@ -64,7 +65,7 @@ private extension MacroFactorFood {
       nutrients: [
         .caffeine: 50.0
       ],
-      serving: .custom(Serving.CustomServing(amount: 36.0, unit: .milliliters)),
+      serving: .measured(Serving.MeasuredServing(amount: 36.0, unit: .milliliters)),
       llmPrompt: "light roast turbo espresso shot",
       barcode: "123456789",
       brand: "Finca Monteblanco",

@@ -27,15 +27,9 @@ extension NutritionalContent: Codable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
     let rawValues = try container.decode([String: Decimal].self)
-    self.nutrients = [:]
-    for (key, value) in rawValues {
-      guard let nutrient = Nutrient(rawValue: key) else {
-        throw DecodingError.dataCorruptedError(
-          in: container,
-          debugDescription: "Unknown nutrient key: \(key)"
-        )
-      }
-      nutrients[nutrient] = value
-    }
+    self.nutrients = rawValues.reduce(into: [Nutrient: Decimal](), { dict, element in
+      guard let nutrient = Nutrient(rawValue: element.key) else { return }
+      dict[nutrient] = element.value
+    })
   }
 }

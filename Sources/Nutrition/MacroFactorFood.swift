@@ -66,4 +66,19 @@ public struct MacroFactorFood: Codable, Equatable {
     self.notes = notes
     self.recipe = recipe
   }
+
+  @_documentation(visibility: internal)
+  public enum CodingKeys: String, CodingKey {
+    case barcode
+    case beverage
+    case brand
+    case icon
+    case llmPrompt
+    case name
+    case notes
+    case nutrients
+    case recipe
+    case serving
+    case source
+  }
 }

@@ -1,5 +1,5 @@
 /// Cartoon shown in MacroFactor's food log. Doubles as a metadata tag (e.g., is a coffee).
-public enum Icon: String, Codable {
+public enum Icon: String, Codable, CaseIterable {
   case water
   case coffee
   case coffeeCappuccino
@@ -342,4 +342,10 @@ public enum Icon: String, Codable {
   case wokStirFry
   case yogurt
   case zucchini
+
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let rawValue = try container.decode(String.self)
+    self = Icon(rawValue: rawValue) ?? Icon.foodDefault
+  }
 }

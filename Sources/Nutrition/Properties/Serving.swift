@@ -5,9 +5,24 @@ public enum Serving: Equatable {
   case one
   case per100Grams
   case per100ML
+  case measured(MeasuredServing)
   case custom(CustomServing)
 
+  /// For arbitrary measures, like "handfuls" or "hamburgers"
   public struct CustomServing: Codable, Equatable {
+    public let amount: Decimal
+    public let label: String
+    public let weight: Decimal
+
+    public init(amount: Decimal, label: String, weight: Decimal) {
+      self.amount = amount
+      self.label = label
+      self.weight = weight
+    }
+  }
+
+  /// For a limited set of input weight and volume units
+  public struct MeasuredServing: Codable, Equatable {
     public let amount: Decimal
     public let unit: Unit
 
@@ -17,7 +32,8 @@ public enum Serving: Equatable {
     }
   }
 
-  public enum Unit: String, Codable, Equatable {
+  /// A limited set of input weight and volume units
+  public enum Unit: String, Codable, Equatable, CaseIterable {
     case grams
     case pounds
     case ounces
@@ -40,6 +56,8 @@ extension Serving: Codable {
           try container.encode("per100Grams")
       case .per100ML:
           try container.encode("per100ML")
+      case .measured(let measuredServing):
+          try container.encode(measuredServing)
       case .custom(let customServing):
           try container.encode(customServing)
       }
@@ -62,9 +80,11 @@ extension Serving: Codable {
           debugDescription: "Invalid serving: \(stringValue)."
         )
       }
-    } else {
-      let custom = try container.decode(CustomServing.self)
+    } else if let custom = try? container.decode(CustomServing.self) {
       self = .custom(custom)
+    } else {
+      let measured = try container.decode(MeasuredServing.self)
+      self = .measured(measured)
     }
   }
 }
