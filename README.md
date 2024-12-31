@@ -1,6 +1,6 @@
 ## Custom Shortcuts
 You can create custom shortcuts to log food into MacroFactor. For example:
-- pipe a photo through an LLM and into our `Log by JSON` shortcut action)
+- pipe a photo through an LLM and into our `Log by JSON` shortcut action
 - react to the JSON our shortcuts emit about today's consumption and goals
 - filter your logged food history (using the `Find Recent Food` action)
 
